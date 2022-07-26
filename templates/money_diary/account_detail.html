@@ -1,0 +1,133 @@
+{% extends 'money_diary/base.html' %}
+
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+  <main>
+    <!-- 口座名と残高 -->
+    <h1>{{ account.name }}</h1>
+    <div class="content_block">
+      <h2>残高：{{ account.balance |intcomma }}円</h2>
+    </div>
+
+    <!-- 残高推移グラフ（後日作成） -->
+    <div class="content_block">
+      <h2>残高推移</h2>
+      <canvas id="myChart"></canvas>
+      <script>
+      var ctx = document.getElementById("myChart");
+      var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ date | safe }},
+            datasets: [{
+                data: {{ balance | safe }},
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                ],
+                borderWidth: 1,
+
+                lineTension: 0
+            }]
+        },
+        options: {
+          //凡例非表示
+          legend: {
+            display: false
+          },
+          scales: {
+              //X軸
+              xAxes: [{
+                  ticks: {
+                    autoSkip: true,
+                    maxTicksLimit: 10,
+                  }
+              }],
+              yAxes: [{
+                  ticks: {
+                      beginAtZero:true
+                  },
+              }]
+          }
+          }
+      });
+      </script>
+    </div>
+    
+    <div class="content_block">
+      <!-- 年月の表示と前後の月への移動 -->
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          <li class="page-item">
+            <a class="page-link" href="{% url 'account_detail' account.id last_year last_month %}" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <h2>{{ year }}年{{ month }}月</h2>
+          <li class="page-item">
+            <a class="page-link" href="{% url 'account_detail' account.id next_year next_month %}" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="content_block">
+      <!-- 収入の詳細テーブル -->
+      <h2>収入詳細</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">日付</th>
+            <th scope="col">内容</th>
+            <th scope="col">金額</th>
+            <th scope="col">金融機関</th>
+            <th scope="col">メモ</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in income %}
+          <tr>
+            <td>{{ item.date }}</td>
+            <td>{{ item.category }}</td>
+            <td>{{ item.amount | intcomma }}円</td>
+            <td>{{ item.account }}</td>
+            <td>{{ item.memo }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="content_block"></div>
+      <!-- 支出の詳細テーブル -->
+      <h2>支出詳細</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">日付</th>
+            <th scope="col">内容</th>
+            <th scope="col">金額</th>
+            <th scope="col">金融機関</th>
+            <th scope="col">メモ</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in expense %}
+          <tr>
+            <td>{{ item.date }}</td>
+            <td>{{ item.category }}</td>
+            <td>{{ item.amount | intcomma }}円</td>
+            <td>{{ item.account }}</td>
+            <td>{{ item.memo }}</td>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+{% endblock %}

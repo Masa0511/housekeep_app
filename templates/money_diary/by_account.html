@@ -1,0 +1,21 @@
+{% extends 'money_diary/base.html' %}
+
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+  <main>
+    <h1>口座一覧</h1>
+    <table class="table">
+      <tbody>
+        {% for item in account_balance %}
+        <tr>
+          <td><a type="button" class="btn btn-outline-primary" href="{% url 'account_detail' item.id %}">選択</a></td>
+          <td>{{ item.name.name }}</td>
+          <td class="price">{{ item.balance | intcomma}}円</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
+{% endblock %}

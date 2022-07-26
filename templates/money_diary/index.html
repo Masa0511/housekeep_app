@@ -1,0 +1,84 @@
+{% extends 'money_diary/base.html' %}
+
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+  <main class="container">
+    <div class="content_block">
+      <!-- 収入のモーダルボタン -->
+      <button type="button" class="btn_index btn btn-primary" data-bs-toggle="modal" data-bs-target="#incomeModal">収入の入力</button>
+      <!-- 収入のモーダル -->
+      <div class="modal fade" id="incomeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">収入の入力</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post">
+              <div class="modal-body">
+                {% csrf_token %}
+                {{ incomeform.as_p }}
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" name="income_register_button" class="btn btn-primary">追加</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- 支出のモーダルボタン -->
+      <button type="button" class="btn_index btn btn-primary " data-bs-toggle="modal" data-bs-target="#expenseModal">支出の入力</button>
+      <!-- 支出のモーダル -->
+      <div class="modal fade" id="expenseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">支出の入力</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post">
+              <div class="modal-body">
+                {% csrf_token %}
+                {{ expenseform.as_p }}
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" name="expense_register_button" class="btn btn-primary">追加</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div> 
+    
+    <div class="content_block">
+      <h2>最近の収入履歴</h2>
+      <table class="table table-dorderless">
+        {% for item in income %}
+        <tr>
+          <td>{{ item.date }}</td>
+          <td>{{ item.category }}</td>
+          <td class="price">{{ item.amount | intcomma }}円</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <div class="content_block">
+      <h2>最近の支出履歴</h2>
+      <table class="table table-dorderless">
+        {% for item in expense   %}
+        <tr>
+          <td>{{ item.date }}</td>
+          <td>{{ item.category }}</td>
+          <td class="price">{{ item.amount | intcomma }}円</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </main>
+{% endblock %}

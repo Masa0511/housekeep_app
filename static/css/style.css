@@ -1,0 +1,41 @@
+@charset "UTF-8";
+
+/* メイン */
+main {
+    width: 900px;
+    margin: 15px auto;
+}
+
+h1 {
+    text-align: center;
+    border-bottom: 3px solid #0099FF;
+}
+
+
+h2 {
+    text-align: center;
+}
+
+.content_block {
+    margin: 20px 0;
+}
+
+/* トップページbootstrapボタン */
+.btn_index {
+    width: 50%;
+    display: block;
+    margin: 10px auto;
+}
+/* 表 */
+.table {
+    margin: 20px auto;
+    width: 70%;
+}
+/* 表のデータ部分 */
+.table td {
+    vertical-align: middle;
+}
+/* 表の金額右端揃い */
+.price {
+    text-align: right;
+}
